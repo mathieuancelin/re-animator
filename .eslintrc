@@ -1,0 +1,22 @@
+{
+  "extends": "eslint-config-airbnb",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "id-length": 0,
+    "no-else-return": 0,
+    "no-console": 0,
+    "no-new-func": 1,
+    "no-empty": 0,
+    "guard-for-in": 0,
+    "new-cap": 0,
+    "space-infix-ops": 0,
+    "no-loop-func": 0,
+    "padded-blocks": 0,
+    "prefer-const": 0,
+    "comma-dangle": 0
+  }
+}

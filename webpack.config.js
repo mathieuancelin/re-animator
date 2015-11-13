@@ -32,7 +32,7 @@ module.exports = {
     libraryTarget: 'umd'
   },
   entry: {
-    'reanimator': ['./index.js']
+    'reanimator': ['./src/index.js']
   },
   resolve: {
     extensions: ['', '.js']

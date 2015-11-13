@@ -2,7 +2,7 @@ require('babel/polyfill');
 
 let commonTimeout = 60000;
 
-export function changeCommonTimeout(value) {
+export function changeGlobalTimeout(value) {
   commonTimeout = value;
 }
 
@@ -94,11 +94,11 @@ export function animateElement(selector, className, options = {}) {
   setTimeout(hideAfterAnimation, timeout || commonTimeout);
 }
 
-export function animate(node, className, cb) {
+export function animate(node, className, cb = nothing) {
   animateElement(node, className, { before: nothing, after: cb });
 }
 
-export function hide(node, className, cb) {
+export function hide(node, className, cb = nothing) {
   animateElement(node, className, {
     before: nothing,
     after: n => {
