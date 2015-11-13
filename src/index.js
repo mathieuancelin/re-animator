@@ -6,16 +6,26 @@ export function changeGlobalTimeout(value) {
   commonTimeout = value;
 }
 
+function assert(fn, message) {
+  if (!fn()) {
+    throw new Error(message);
+  }
+}
+
 function nothing() {}
 
 function actualNode(node) {
   return (typeof node === 'string') ? document.querySelector(node) : node;
 }
 
-export function animateElements(selector, className, options = {}) {
+export function animateElements(selector, classNames, options = {}) {
   let cleanedUp = false;
   const { beforeAll, afterAll, beforeItem, afterItem, timeout } = options;
-  const nodes = [].slice.call(document.querySelectorAll(selector));
+
+  assert(() => Array.isArray(classNames), 'ClassNames should be an array of HtmlElement or a NodeList');
+  assert(() => timeout, 'Timeout value is required to remove animation class');
+
+  const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ? selector : [].slice.call(document.querySelectorAll(selector));
   const length = nodes.length;
   let counter = 0;
 
@@ -34,7 +44,7 @@ export function animateElements(selector, className, options = {}) {
     }
     const node = e.target;
     node.removeEventListener('animationend', itemAnimationEnd, false);
-    node.classList.toggle(className);
+    classNames.forEach(className => node.classList.toggle(className));
     if (afterItem) {
       try {
         afterItem(node);
@@ -58,48 +68,27 @@ export function animateElements(selector, className, options = {}) {
       beforeItem(node);
     }
     node.addEventListener('animationend', itemAnimationEnd, false);
-    node.classList.toggle(className);
+    classNames.forEach(className => node.classList.toggle(className));
   });
   setTimeout(() => nodes.forEach(node => itemAnimationEnd({ target: node })), timeout || commonTimeout);
 }
 
 export function animateElement(selector, className, options = {}) {
-  let cleanedUp = false;
   const { before, after, timeout } = options;
   const node = actualNode(selector);
-  function hideAfterAnimation() {
-    if (cleanedUp) {
-      return;
-    }
-    cleanedUp = true;
-    node.removeEventListener('animationend', hideAfterAnimation, false);
-    node.classList.toggle(className);
-    if (after) {
-      try {
-        after(node);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
-  if (before) {
-    try {
-      before(node);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-  node.addEventListener('animationend', hideAfterAnimation, false);
-  node.classList.toggle(className);
-  setTimeout(hideAfterAnimation, timeout || commonTimeout);
+  const classNames = Array.isArray(className) ? className : [className];
+  animateElements([node], classNames, { beforeItem: before, afterItem: after, timeout });
 }
 
-export function animate(node, className, cb = nothing) {
-  animateElement(node, className, { before: nothing, after: cb });
+export function animate(node, className, timeout, cb = nothing) {
+  assert(() => timeout, 'Timeout value is required to remove animation class');
+  animateElement(node, className, { before: nothing, after: cb, timeout });
 }
 
-export function hide(node, className, cb = nothing) {
+export function hide(node, className, timeout, cb = nothing) {
+  assert(() => timeout, 'Timeout value is required to remove animation class');
   animateElement(node, className, {
+    timeout,
     before: nothing,
     after: n => {
       n.style.display = 'none';
@@ -114,7 +103,8 @@ export function hide(node, className, cb = nothing) {
   });
 }
 
-export function show(n, className, displayArg, cbArg) {
+export function show(n, className, timeout, displayArg, cbArg) {
+  assert(() => timeout, 'Timeout value is required to remove animation class');
   let display = displayArg;
   let cb = cbArg;
   const node = actualNode(n);
@@ -123,6 +113,7 @@ export function show(n, className, displayArg, cbArg) {
     display = 'block';
   }
   animateElement(node, className, {
+    timeout,
     before: theNode => {
       theNode.style.display = display || 'block';
     },

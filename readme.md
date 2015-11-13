@@ -6,12 +6,12 @@ Re-Animator is a simple library to animation DOM nodes using CSS3 animations.
 
 The API is the following :
 
-* `ReAnimator.changeGlobalTimeout(value)` : change the global timeout after which animation are ended no matter what
-* `ReAnimator.hide(node: (string || Node), cssClass: string, callback: function)` : hides a dom node after animation end
-* `ReAnimator.show(node: (string || Node), cssClass: string, callback: function)` : shows a dom node after animation end
-* `ReAnimator.animate(node: (string || Node), cssClass: string, callback: function)` : animate a dom node
-* `ReAnimator.animateElement(node: (string || Node), cssClass: string, options: object)` : animate a dom node
-* `ReAnimator.animateElements(node: (string || Node), cssClass: string, options: object)` : animate dom nodes
+* `changeGlobalTimeout(value)` : change the global timeout after which animation are ended no matter what
+* `hide(node: string || Node, cssClass: array[string] || string, timeout: int, callback: function)` : hides a dom node after animation end
+* `show(node: string || Node, cssClass: array[string] || string, timeout: int, callback: function)` : shows a dom node after animation end
+* `animate(node: string || Node, cssClass: array[string] || string, timeout: int, callback: function)` : animate a dom node
+* `animateElement(node: string || Node, cssClass: array[string] || string, options: object)` : animate a dom node
+* `animateElements(node: string || Node, cssClass: array[string], options: object)` : animate dom nodes
 
 options on `animateElement` are :
 

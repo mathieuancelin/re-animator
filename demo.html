@@ -70,15 +70,15 @@
           document.getElementById('showhide').addEventListener('click', function(e) {
             e.preventDefault();
             if (show) {
-              ReAnimator.hide('#hiddable', 'fadeout');
+              ReAnimator.hide('#hiddable', 'fadeout', 2000);
             } else {
-              ReAnimator.show('#hiddable', 'fadein');
+              ReAnimator.show('#hiddable', 'fadein', 2000);
             }
             show = !show;
           });
           setTimeout(function() {
-            ReAnimator.animateElement('#part', 'loop', { timeout: 2000 });
-            ReAnimator.animateElements('.parts', 'loop', { timeout: 2000 });
+            ReAnimator.animateElement('#part', ['loop'], { timeout: 2000 });
+            ReAnimator.animateElements('.parts', ['loop'], { timeout: 2000 });
           }, 1000);
         </script>
     </body>
