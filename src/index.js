@@ -18,14 +18,16 @@ function actualNode(node) {
   return (typeof node === 'string') ? document.querySelector(node) : node;
 }
 
-export function animateElements(selector, classNames, options = {}) {
+export function animateElements(selector, className, options = {}) {
   let cleanedUp = false;
   const { beforeAll, afterAll, beforeItem, afterItem, timeout } = options;
+  const classNames = Array.isArray(className) ? className : [className];
 
-  assert(() => Array.isArray(classNames), 'ClassNames should be an array of HtmlElement or a NodeList');
   assert(() => timeout, 'Timeout value is required to remove animation class');
 
-  const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ? selector : [].slice.call(document.querySelectorAll(selector));
+  const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ?
+      selector : [].slice.call(document.querySelectorAll(selector));
+      
   const length = nodes.length;
   let counter = 0;
 

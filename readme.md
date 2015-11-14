@@ -2,16 +2,20 @@ Re-Animator
 ----------------------
 
 
-Re-Animator is a simple library to animation DOM nodes using CSS3 animations.
+Re-Animator is a simple library to animation DOM nodes using CSS3 animations. The global namespace in non commonJS env is `ReAnimator`
 
 The API is the following :
 
 * `changeGlobalTimeout(value)` : change the global timeout after which animation are ended no matter what
-* `hide(node: string || Node, cssClass: array[string] || string, timeout: int, callback: function)` : hides a dom node after animation end
-* `show(node: string || Node, cssClass: array[string] || string, timeout: int, callback: function)` : shows a dom node after animation end
-* `animate(node: string || Node, cssClass: array[string] || string, timeout: int, callback: function)` : animate a dom node
-* `animateElement(node: string || Node, cssClass: array[string] || string, options: object)` : animate a dom node
-* `animateElements(node: string || Node, cssClass: array[string], options: object)` : animate dom nodes
+* `hide(node: string, cssClass: string, timeout: int, callback: function)` : hides a dom node after animation end
+* `show(node: string, cssClass: string, timeout: int, [display]: string, callback: function)` : shows a dom node after animation end
+* `animate(node: string, cssClass: string, timeout: int, callback: function)` : animate a dom node
+* `animateElement(node: string, cssClass: string, options: object)` : animate a dom node
+* `animateElements(nodes: string, cssClass: string, options: object)` : animate dom nodes
+
+`node` arguments can be string (querySelector) or HtmlElement.
+`nodes` arguments can be string (querySelectorAll) or NodeList.
+`cssClass` arguments can be string or array of string.
 
 options on `animateElement` are :
 
@@ -102,15 +106,15 @@ ReAnimator.animateElement('#part', 'loop', { timeout: 6000 });
 
 ReAnimator.animateElements('.parts', 'loop', { timeout: 6000 });
 
-ReAnimator.hide('#part', 'fade-out', function() {
+ReAnimator.hide('#part', 'fade-out', 1000, function() {
   console.log('done');
 });
 
-ReAnimator.show('#part', 'fade-in', function() {
+ReAnimator.show('#part', 'fade-in', 1000, function() {
   console.log('done');
 });
 
-ReAnimator.animate('#part', 'scale', function() {
+ReAnimator.animate('#part', 'scale', 1000, function() {
   console.log('done');
 });
 ```
