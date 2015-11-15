@@ -2,8 +2,8 @@
 
 import jsdom from 'jsdom';
 
-export function setupEnv() {
-  const doc = jsdom.jsdom('<!doctype html><html><body><div id="part" style="display: block;"></div><div id="p1" class="parts"></div><div id="p2" class="parts"></div></body></html>');
+export function setupEnv(body = '') {
+  const doc = jsdom.jsdom(`<!doctype html><html><body>${body}</body></html>`);
   const win = doc.defaultView;
   function propagateToGlobal(window) {
     for (const key in window) {
