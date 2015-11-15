@@ -70,15 +70,41 @@
           document.getElementById('showhide').addEventListener('click', function(e) {
             e.preventDefault();
             if (show) {
-              ReAnimator.hide('#hiddable', 'fadeout', 2000);
+              ReAnimator.hide('#hiddable', 'fadeout', 2000, function() {
+                console.log('done hide');
+              });
             } else {
-              ReAnimator.show('#hiddable', 'fadein', 2000);
+              ReAnimator.show('#hiddable', 'fadein', 2000, function() {
+                console.log('done show');
+              });
             }
             show = !show;
           });
           setTimeout(function() {
-            ReAnimator.animateElement('#part', ['loop'], { timeout: 2000 });
-            ReAnimator.animateElements('.parts', ['loop'], { timeout: 2000 });
+            ReAnimator.animateElement('#part', ['loop'], {
+              timeout: 6000,
+              before: function() {
+                console.log('[ELEMENT] start animate node');
+              },
+              after: function() {
+                console.log('[ELEMENT] stop animate node');
+              }
+            });
+            ReAnimator.animateElements('.parts', ['loop'], {
+              timeout: 6000,
+              beforeItem: function() {
+                console.log('[ELEMENTS] start animate one node');
+              },
+              afterItem: function() {
+                console.log('[ELEMENTS] stop animate one node');
+              },
+              beforeAll: function() {
+                console.log('[ELEMENTS] start animateElements');
+              },
+              afterAll: function() {
+                console.log('[ELEMENTS] done animateElements');
+              }
+            });
           }, 1000);
         </script>
     </body>

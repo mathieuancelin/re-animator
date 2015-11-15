@@ -19,44 +19,13 @@ function actualNode(node) {
 }
 
 export function animateElements(selector, className, options = {}) {
-  let cleanedUp = false;
   const { beforeAll, afterAll, beforeItem, afterItem, timeout } = options;
   const classNames = Array.isArray(className) ? className : [className];
-
   assert(() => timeout, 'Timeout value is required to remove animation class');
-
   const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ?
       selector : [].slice.call(document.querySelectorAll(selector));
-      
   const length = nodes.length;
   let counter = 0;
-
-  function decrementAndTrigger() {
-    counter = counter + 1;
-    if (afterAll && counter === length) {
-      afterAll(nodes);
-      cleanedUp = true;
-      counter = counter + 999;
-    }
-  }
-
-  function itemAnimationEnd(e) {
-    if (cleanedUp) {
-      return;
-    }
-    const node = e.target;
-    node.removeEventListener('animationend', itemAnimationEnd, false);
-    classNames.forEach(className => node.classList.toggle(className));
-    if (afterItem) {
-      try {
-        afterItem(node);
-      } catch (ex) {
-        console.error(ex);
-      }
-    }
-    decrementAndTrigger();
-  }
-
   if (beforeAll) {
     try {
       beforeAll(nodes);
@@ -64,22 +33,59 @@ export function animateElements(selector, className, options = {}) {
       console.error(e);
     }
   }
-
-  nodes.forEach(node => {
-    if (beforeItem) {
-      beforeItem(node);
+  nodes.forEach(node => animateElement(node, classNames, { timeout, before: beforeItem, after: node => {
+    if (afterItem) {
+      try {
+        afterItem(node);
+      } catch (e) {
+        console.error(e);
+      }
     }
-    node.addEventListener('animationend', itemAnimationEnd, false);
-    classNames.forEach(className => node.classList.toggle(className));
-  });
-  setTimeout(() => nodes.forEach(node => itemAnimationEnd({ target: node })), timeout || commonTimeout);
+    counter = counter + 1;
+    if (counter === length) {
+      if (afterAll) {
+        try {
+          afterAll(nodes);
+        } catch (ex) {
+          console.error(ex);
+        }
+      }
+    }
+  }}));
 }
 
 export function animateElement(selector, className, options = {}) {
-  const { before, after, timeout } = options;
-  const node = actualNode(selector);
-  const classNames = Array.isArray(className) ? className : [className];
-  animateElements([node], classNames, { beforeItem: before, afterItem: after, timeout });
+  setTimeout(() => {
+    let cleanedUp = false;
+    const { before, after, timeout } = options;
+    const node = actualNode(selector);
+    const classNames = Array.isArray(className) ? className : [className];
+    function hideAfterAnimation() {
+      if (cleanedUp) {
+        return;
+      }
+      cleanedUp = true;
+      node.removeEventListener('animationend', hideAfterAnimation, false);
+      classNames.forEach(className => node.classList.toggle(className));
+      if (after) {
+        try {
+          after(node);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    if (before) {
+      try {
+        before(node);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    node.addEventListener('animationend', hideAfterAnimation, false);
+    classNames.forEach(className => node.classList.toggle(className));
+    setTimeout(hideAfterAnimation, timeout || commonTimeout);
+  }, 0);
 }
 
 export function animate(node, className, timeout, cb = nothing) {
