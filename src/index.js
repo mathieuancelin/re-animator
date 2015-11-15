@@ -1,4 +1,4 @@
-require('babel/polyfill');
+require('babel-polyfill');
 
 let commonTimeout = 60000;
 
