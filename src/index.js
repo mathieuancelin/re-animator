@@ -18,6 +18,40 @@ function actualNode(node) {
   return (typeof node === 'string') ? document.querySelector(node) : node;
 }
 
+export function animateElement(selector, className, options = {}) {
+  setTimeout(() => {
+    let cleanedUp = false;
+    const { before, after, timeout } = options;
+    const node = actualNode(selector);
+    const classNames = Array.isArray(className) ? className : [className];
+    function hideAfterAnimation() {
+      if (cleanedUp) {
+        return;
+      }
+      cleanedUp = true;
+      node.removeEventListener('animationend', hideAfterAnimation, false);
+      classNames.forEach(cn => node.classList.toggle(cn));
+      if (after) {
+        try {
+          after(node);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    if (before) {
+      try {
+        before(node);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    node.addEventListener('animationend', hideAfterAnimation, false);
+    classNames.forEach(cn => node.classList.toggle(cn));
+    setTimeout(hideAfterAnimation, timeout || commonTimeout);
+  }, 0);
+}
+
 export function animateElements(selector, className, options = {}) {
   const { beforeAll, afterAll, beforeItem, afterItem, timeout } = options;
   const classNames = Array.isArray(className) ? className : [className];
@@ -33,7 +67,7 @@ export function animateElements(selector, className, options = {}) {
       console.error(e);
     }
   }
-  nodes.forEach(node => animateElement(node, classNames, { timeout, before: beforeItem, after: node => {
+  nodes.forEach(n => animateElement(n, classNames, { timeout, before: beforeItem, after: node => {
     if (afterItem) {
       try {
         afterItem(node);
@@ -52,40 +86,6 @@ export function animateElements(selector, className, options = {}) {
       }
     }
   }}));
-}
-
-export function animateElement(selector, className, options = {}) {
-  setTimeout(() => {
-    let cleanedUp = false;
-    const { before, after, timeout } = options;
-    const node = actualNode(selector);
-    const classNames = Array.isArray(className) ? className : [className];
-    function hideAfterAnimation() {
-      if (cleanedUp) {
-        return;
-      }
-      cleanedUp = true;
-      node.removeEventListener('animationend', hideAfterAnimation, false);
-      classNames.forEach(className => node.classList.toggle(className));
-      if (after) {
-        try {
-          after(node);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-    if (before) {
-      try {
-        before(node);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    node.addEventListener('animationend', hideAfterAnimation, false);
-    classNames.forEach(className => node.classList.toggle(className));
-    setTimeout(hideAfterAnimation, timeout || commonTimeout);
-  }, 0);
 }
 
 export function animate(node, className, timeout, cb = nothing) {
