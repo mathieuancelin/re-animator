@@ -2,7 +2,7 @@
 
 import jsdom from 'jsdom';
 
-export function setupEnv(body = '') {
+export function bootstrap(body = '') {
   const doc = jsdom.jsdom(`<!doctype html><html><body>${body}</body></html>`);
   const win = doc.defaultView;
   function propagateToGlobal(window) {
