@@ -18,6 +18,18 @@ function actualNode(node) {
   return (typeof node === 'string') ? document.querySelector(node) : node;
 }
 
+function safe(func) {
+  return (arg) => {
+    if (func) {
+      try {
+        return func(arg);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+}
+
 export function animateElement(selector, className, options = {}) {
   setTimeout(() => {
     let cleanedUp = false;
@@ -31,21 +43,9 @@ export function animateElement(selector, className, options = {}) {
       cleanedUp = true;
       node.removeEventListener('animationend', hideAfterAnimation, false);
       classNames.forEach(cn => node.classList.toggle(cn));
-      if (after) {
-        try {
-          after(node);
-        } catch (e) {
-          console.error(e);
-        }
-      }
+      safe(after)(node);
     }
-    if (before) {
-      try {
-        before(node);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    safe(before)(node);
     node.addEventListener('animationend', hideAfterAnimation, false);
     classNames.forEach(cn => node.classList.toggle(cn));
     setTimeout(hideAfterAnimation, timeout || commonTimeout);
@@ -60,30 +60,12 @@ export function animateElements(selector, className, options = {}) {
       selector : [].slice.call(document.querySelectorAll(selector));
   const length = nodes.length;
   let counter = 0;
-  if (beforeAll) {
-    try {
-      beforeAll(nodes);
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  safe(beforeAll)(nodes);
   nodes.forEach(n => animateElement(n, classNames, { timeout, before: beforeItem, after: node => {
-    if (afterItem) {
-      try {
-        afterItem(node);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    safe(afterItem)(node);
     counter = counter + 1;
     if (counter === length) {
-      if (afterAll) {
-        try {
-          afterAll(nodes);
-        } catch (ex) {
-          console.error(ex);
-        }
-      }
+      safe(afterAll)(nodes);
     }
   }}));
 }
@@ -100,13 +82,7 @@ export function hide(node, className, timeout, cb = nothing) {
     before: nothing,
     after: n => {
       n.style.display = 'none';
-      if (cb) {
-        try {
-          cb();
-        } catch (e) {
-          console.error(e);
-        }
-      }
+      safe(cb)();
     }
   });
 }
@@ -126,5 +102,24 @@ export function show(n, className, timeout, displayArg, cbArg) {
       theNode.style.display = display || 'block';
     },
     after: cb
+  });
+}
+
+export function transition(selector, baseName, options) {
+  const { before, after, timeout } = options;
+  const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ?
+      selector : [].slice.call(document.querySelectorAll(selector));
+  assert(() => timeout, 'Timeout value is required to remove animation class');
+  nodes.forEach(node => {
+    safe(before)(node);
+    node.classList.toggle(baseName);
+    setTimeout(() => {
+      node.classList.toggle(`${baseName}-active`);
+      setTimeout(() => {
+        node.classList.toggle(baseName);
+        node.classList.toggle(`${baseName}-active`);
+        safe(after)(node);
+      }, timeout);
+    }, 1);
   });
 }

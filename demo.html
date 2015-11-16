@@ -45,6 +45,15 @@
           animation-duration: 0.3s;
           animation-timing-function: ease-in-out;
         }
+        .example-enter {
+          background-color: red;
+          opacity: 0.01;
+        }
+
+        .example-enter.example-enter-active {
+          opacity: 1;
+          transition: opacity 2000ms ease-in;
+        }
         </style>
     </head>
     <body>
@@ -59,6 +68,7 @@
         </div>
         <div style="padding: 50px 50px 50px 50px; display: flex; flex-direction: column">
           <button id="showhide">Show / Hide</button>
+          <button id="showhide2">Show / Hide</button>
         </div>
         <div style="padding: 50px 50px 50px 50px; display: flex; flex-direction: column">
           <div id="hiddable" style="margin-bottom: 10px; width: 50px; height: 50px; background-color: green"></div>
@@ -79,6 +89,11 @@
               });
             }
             show = !show;
+          });
+          document.getElementById('showhide2').addEventListener('click', function(e) {
+            ReAnimator.transition('#hiddable', 'example-enter', { timeout: 2100, after: function() {
+                console.log('done');
+            }});
           });
           setTimeout(function() {
             ReAnimator.animateElement('#part', ['loop'], {
