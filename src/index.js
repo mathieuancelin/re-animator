@@ -107,8 +107,20 @@ export function show(n, className, timeout, displayArg, cbArg) {
 
 export function transition(selector, baseName, options) {
   const { before, after, timeout } = options;
-  const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ?
-      selector : [].slice.call(document.querySelectorAll(selector));
+  let nodes = [];
+  if (selector instanceof HTMLElement) {
+    nodes = [selector];
+  } else if (selector instanceof Element) {
+    nodes = [selector];
+  } else if (Array.isArray(selector) && selector.length > 0 && selector[0] instanceof HTMLElement) {
+    nodes = selector;
+  } else if (selector instanceof NodeList) {
+    nodes = [].slice.call(selector);
+  } else if (typeof selector === 'string') {
+    nodes = [].slice.call(document.querySelectorAll(selector));
+  } else {
+    throw new Error('Unknown selector', selector);
+  }
   assert(() => timeout, 'Timeout value is required to remove animation class');
   nodes.forEach(node => {
     safe(before)(node);

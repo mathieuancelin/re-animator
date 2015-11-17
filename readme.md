@@ -12,6 +12,7 @@ The API is the following :
 * `animate(node: string, cssClass: string, timeout: int, callback: function)` : animate a dom node
 * `animateElement(node: string, cssClass: string, options: object)` : animate a dom node
 * `animateElements(nodes: string, cssClass: string, options: object)` : animate dom nodes
+* `transition(nodes: string, baseClass: string, options: object)` : add baseClass class to nodes and in the next tick add `${baseClass}-active` to trigger animation. Use options timeout to remove both classes.
 
 `node` arguments can be string (querySelector) or HtmlElement.
 `nodes` arguments can be string (querySelectorAll) or NodeList.
