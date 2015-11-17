@@ -1,6 +1,11 @@
 Re-Animator
 ----------------------
 
+[![build status][1]][2]
+[![NPM version][3]][4]
+[![Dependency status][7]][8]
+[![Dev Dependency status][11]][12]
+[![Downloads][9]][10]
 
 Re-Animator is a simple library to animation DOM nodes using CSS3 animations. The global namespace in non commonJS env is `ReAnimator`
 
@@ -119,3 +124,15 @@ ReAnimator.animate('#part', 'scale', 1000, function() {
   console.log('done');
 });
 ```
+
+
+[1]: https://api.travis-ci.org/mathieuancelin/re-animator.svg
+[2]: https://api.travis-ci.org/mathieuancelin/re-animator
+[3]: https://badge.fury.io/js/re-animator.svg
+[4]: https://badge.fury.io/js/re-animator
+[7]: https://david-dm.org/mathieuancelin/re-animator.svg
+[8]: https://david-dm.org/mathieuancelin/re-animator
+[9]: https://img.shields.io/npm/dm/re-animator.svg
+[10]: https://www.npmjs.com/package/re-animator
+[11]: https://img.shields.io/david/dev/mathieuancelin/re-animator.svg
+[12]: https://david-dm.org/mathieuancelin/re-animator#info=devDependencies&view=table
