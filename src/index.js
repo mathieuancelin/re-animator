@@ -67,7 +67,7 @@ export function animateElements(selector, className, options = {}) {
     if (counter === length) {
       safe(afterAll)(nodes);
     }
-  }}));
+  } }));
 }
 
 export function animate(node, className, timeout, cb = nothing) {
@@ -81,7 +81,7 @@ export function hide(node, className, timeout, cb = nothing) {
     timeout,
     before: nothing,
     after: n => {
-      n.style.display = 'none';
+      n.style.display = 'none'; // eslint-disable-line
       safe(cb)();
     }
   });
@@ -99,7 +99,7 @@ export function show(n, className, timeout, displayArg, cbArg) {
   animateElement(node, className, {
     timeout,
     before: theNode => {
-      theNode.style.display = display || 'block';
+      theNode.style.display = display || 'block'; // eslint-disable-line
     },
     after: cb
   });

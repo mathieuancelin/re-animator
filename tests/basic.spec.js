@@ -1,7 +1,7 @@
 /* eslint no-unused-vars:0, no-undef:0, no-unused-expressions:0 */
 
 import * as ReAnimator from '../src/index';
-import chai, {expect} from 'chai';
+import chai, { expect } from 'chai';
 
 describe('ReAnimator', () => {
   it('should be able to animate one element', (done) => {
