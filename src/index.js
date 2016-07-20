@@ -56,7 +56,7 @@ export function animateElements(selector, className, options = {}) {
   const { beforeAll, afterAll, beforeItem, afterItem, timeout } = options;
   const classNames = Array.isArray(className) ? className : [className];
   assert(() => timeout, 'Timeout value is required to remove animation class');
-  const nodes = (Array.isArray(selector) || (selector instanceof NodeList)) ?
+  const nodes = (Array.isArray(selector) || (selector instanceof window.NodeList)) ?
       selector : [].slice.call(document.querySelectorAll(selector));
   const length = nodes.length;
   let counter = 0;
@@ -108,13 +108,15 @@ export function show(n, className, timeout, displayArg, cbArg) {
 export function transition(selector, baseName, options) {
   const { before, after, timeout } = options;
   let nodes = [];
-  if (selector instanceof HTMLElement) {
+  if (selector instanceof window.HTMLElement) {
     nodes = [selector];
-  } else if (selector instanceof Element) {
+  } else if (selector instanceof window.Element) {
     nodes = [selector];
-  } else if (Array.isArray(selector) && selector.length > 0 && selector[0] instanceof HTMLElement) {
+  } else if (Array.isArray(selector)
+      && selector.length > 0
+      && selector[0] instanceof window.HTMLElement) {
     nodes = selector;
-  } else if (selector instanceof NodeList) {
+  } else if (selector instanceof window.NodeList) {
     nodes = [].slice.call(selector);
   } else if (typeof selector === 'string') {
     nodes = [].slice.call(document.querySelectorAll(selector));
