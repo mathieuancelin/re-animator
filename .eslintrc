@@ -25,6 +25,9 @@
     "global-require": 1,
     "no-restricted-syntax": 0,
     "no-underscore-dangle": 0,
-    "no-extra-parens": 1
+    "no-extra-parens": 1,
+    "import/no-extraneous-dependencies": 0,
+    "import/prefer-default-export": 0,
+    "max-len": [2, 150, 2]
   }
 }

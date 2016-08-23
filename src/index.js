@@ -61,9 +61,9 @@ export function animateElements(selector, className, options = {}) {
   const length = nodes.length;
   let counter = 0;
   safe(beforeAll)(nodes);
-  nodes.forEach(n => animateElement(n, classNames, { timeout, before: beforeItem, after: node => {
+  nodes.forEach(n => animateElement(n, classNames, { timeout, before: beforeItem, after: node => { // eslint-disable-line
     safe(afterItem)(node);
-    counter = counter + 1;
+    counter = counter + 1; // eslint-disable-line
     if (counter === length) {
       safe(afterAll)(nodes);
     }

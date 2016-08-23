@@ -1,4 +1,4 @@
-/* eslint no-unused-vars:0, no-undef:0, no-unused-expressions:0, no-console: 0 */
+/* eslint no-unused-vars:0, no-undef:0, no-unused-expressions:0, no-console: 0, global-require: 0, react/require-extension: 0 */
 
 import * as Env from './env';
 
