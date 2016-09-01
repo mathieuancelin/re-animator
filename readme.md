@@ -7,10 +7,10 @@ Re-Animator
 [![Dev Dependency status][11]][12]
 [![Downloads][9]][10]
 
-Re-Animator is a simple library to animation DOM nodes using CSS3 animations. The global namespace in non commonJS env is `ReAnimator` and import the script from npmcdn :
+Re-Animator is a simple library to animation DOM nodes using CSS3 animations. The global namespace in non commonJS env is `ReAnimator` and import the script from unpkg :
 
 ```html
-<script src="https://npmcdn.com/re-animator/dist/re-animator.js"></script>
+<script src="https://unpkg.com/re-animator/dist/re-animator.js"></script>
 ```
 
 The API is the following :
